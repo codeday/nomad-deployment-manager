@@ -8,12 +8,15 @@
     "start": "next start"
   },
   "dependencies": {
+    "@zeit/next-css": "^1.0.1",
     "deepmerge": "^4.2.2",
     "dotenv": "^8.2.0",
     "next": "9.3.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "request": "^2.88.2",
-    "request-promise-native": "^1.0.8"
+    "request-promise-native": "^1.0.8",
+    "tailwindcss": "^1.2.0",
+    "postcss-preset-env": "^6.7.0"
   }
 }
