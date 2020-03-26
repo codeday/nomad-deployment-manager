@@ -7,7 +7,7 @@ import iconSwitch from '../../components/Icons'
 export const getServerSideProps = async () => {
   return {
     props: {
-      jobs: await getJobs(),
+      jobs: (await getJobs()).filter((job) => job.ParentID === ""),
     },
   };
 };
