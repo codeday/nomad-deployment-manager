@@ -32,7 +32,6 @@ const JobsList = ({iterable, ...props}) => (
 )
 
 export default ({ jobs }) => {
-  console.log(jobs)
   return (
     <Layout>
       <JobsList className="mt-8" iterable={jobs} />
