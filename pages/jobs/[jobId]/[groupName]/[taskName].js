@@ -5,6 +5,10 @@ import { useState } from 'react';
 
 import Layout from '../../../../components/layout'
 
+import Button from '@codeday/topo/Atom/Button';
+import Text from '@codeday/topo/Atom/Text';
+import Box, { Grid, Flex } from '@codeday/topo/Atom/Box';
+
 const postUpdatedTag = async (jobId, groupName, taskName, newTag) => {
   await fetch(`/api/${jobId}/${groupName}/${taskName}/update-tag`, {
     method: 'POST',
@@ -34,36 +38,54 @@ export const getServerSideProps = async ({ params }) => {
   };
 };
 
+const Menu = ({id}) => (
+  <Link href={`/jobs/${id}`}>
+    <Button as="a" variant="outline" variantColor="brand">
+      &laquo; Back to {id}
+    </Button>
+  </Link>
+)
+
 export default ({ job, taskGroup, task, repo, defaultTag, builds }) => {
   const [ tag, setTag ] = useState(defaultTag);
 
   return (
-    <Layout>
-      <Link href={`/jobs/${job.ID}`}><a>&laquo; Back to {job.ID}</a></Link>
-      <div className="w-full h-full px-16 mt-8">
-        <h2 className="text-2xl pr-8 uppercase font-black">{job.ID} &rarr; {taskGroup.Name} &rarr; {task.Name}</h2>
-        <div className="flex justify-between max-w-3xl bg-gray-400 p-2 my-2 rounded-lg">
-          <div>
-            <input className="rounded px-1 py-1" type="text" value={repo} readOnly={true} /> 
-            <span className="text-lg mx-1">:</span>
-            <input className="rounded px-1 py-1" type="text" type="text" value={tag} onChange={(e) => setTag(e.target.value)} />
-          </div>
-          <input className="rounded px-1 py-1 bg-blue-200 transition duration-200 hover:shadow-md hover:bg-blue-300" type="button" onClick={() => postUpdatedTag(job.ID, taskGroup.Name, task.Name, tag)} value="Deploy" />
-        </div>
-        {builds && (
-          <div className="bg-green-200 border-l-8 border-green-500 my-4 p-4">
-            {builds.map((build) => (
-              <div className="py-2" style={{ fontWeight: tag === build.id ? '700' : '500' }} key={build.id}>
-                <a
-                  href="#"
-                  onClick={(e) => { e.preventDefault(); setTag(build.id); return false; }}
-                >{build.id}</a>
-                (&ldquo;{build.message}&rdquo; &mdash;{build.committer})
-              </div>
-            ))}
-          </div>
+    <Layout 
+      extendMenu={<Menu id={job.ID} />}
+    >
+      <Text textTransform="uppercase" fontWeight="bold" fontSize="3xl" as='h1' paddingRight={4}>
+        {job.ID} &rarr; {taskGroup.Name} &rarr; {task.Name}
+      </Text>
+      <Box padding={2} marginY={2} borderWidth="1px" rounded="lg">
+        <Flex justify="space-between">
+          <Flex align="center" >
+            <Text as="span">{repo}</Text>
+            <Text as="span" paddingX={1}>:</Text>
+            <Text as="input" fontWeight="bold" type="text" value={tag} onChange={(e) => setTag(e.target.value)} />
+          </Flex>
+          <Button
+            type="button"
+            onClick={() => postUpdatedTag(job.ID, taskGroup.Name, task.Name, tag)} 
+          >
+            Deploy
+          </Button>
+        </Flex>
+      </Box>
+      {builds && (
+        <Box padding={4} marginY={4} backgroundColor="green.100" borderColor="green.700" borderLeftWidth="6px">
+          {builds.map((build) => (
+            <Text style={{ fontWeight: tag === build.id ? '700' : '500' }} key={build.id}>
+              <Text
+                as="a"
+                onClick={(e) => { e.preventDefault(); setTag(build.id); return false; }}
+              >
+                {build.id}
+              </Text>
+              (&ldquo;{build.message}&rdquo; &mdash;{build.committer})
+            </Text>
+          ))}
+        </Box>
       )}
-      </div>
     </Layout>
   )
 };

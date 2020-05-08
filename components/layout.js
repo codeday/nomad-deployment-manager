@@ -1,13 +1,25 @@
 import React from 'react'
-import '../styles/index.css'
+import Link from 'next/link'
+import { Heading } from '@codeday/topo/Atom/Text';
+import Header, { SiteLogo, Menu } from '@codeday/topo/Organism/Header';
+import { CsFest } from '@codeday/topo/Atom/Logo';
+import Content from '@codeday/topo/Molecule/Content';
 
-const Layout = ({children, ...props}) => (
-  <div className="flex align-center justify-center lg:h-screen" props>
-      <div className="max-w-6xl xl:max-w-7xl mt-4 w-full">
-        <h1 className="text-center"><span className="text-4xl font-bold">Quick Deploy</span></h1>
-        {children}
-      </div>
+const Layout = ({children, extendMenu}) => (
+  <div>
+    <Header underscore>
+      <SiteLogo>
+        <CsFest as="a" href="/" fontSize="4xl" withText text="Quick Deploy" />
+      </SiteLogo>
+      <Menu>
+        {extendMenu}
+      </Menu>
+    </Header>
+    <Content>
+      {children}
+    </Content>
   </div>
 )
+
 
 export default Layout

@@ -3,6 +3,8 @@ import { getJobs }  from '../../utils/nomad'
 import Layout from '../../components/layout'
 
 import iconSwitch from '../../components/Icons'
+import Box, { Grid, Flex } from '@codeday/topo/Atom/Box';
+import StatusDot from '@codeday/topo/Atom/StatusDot';
 
 export const getServerSideProps = async () => {
   return {
@@ -14,21 +16,21 @@ export const getServerSideProps = async () => {
 
 const ListItem = ({item, ...props}) => (
   <Link href={`/jobs/${item.ID}`}>
-    <a className="bg-white max-w-xs w-3/4 lg:w-1/4 py-4 px-4 mx-auto mx-8 my-2 flex justify-between rounded-md border shadow transition duration-300 hover:bg-gray-100 hover:shadow-lg transform hover:scale-105" key={item.ID}>
-      <span>{item.ID}</span>
-      <div className="h-6 w-6">
+    <Box as="a" w="100%" padding={[4]} borderWidth="1px" rounded="lg">
+      <Flex justify="space-between" align="center">
+        <p>{item.ID}</p>
         {iconSwitch(item.Status)}
-      </div>
-    </a>
+      </Flex>
+    </Box>
   </Link>
 )
 
 const JobsList = ({iterable, ...props}) => (
-  <div className={"flex flex-col flex-wrap w-full h-full lg:-mb-64 lg:pb-64 " + props.className}>
+  <Grid paddingBottom={[16]} templateColumns={["repeat(1, 1fr)","repeat(2, 1fr)","repeat(3, 1fr)"]} gap={4}>
     {
       iterable.map(item =>  <ListItem item={item} />)
     }
-  </div>
+  </Grid>
 )
 
 export default ({ jobs }) => {
