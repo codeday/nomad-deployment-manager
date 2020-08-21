@@ -6,8 +6,10 @@ const fetchNomad = async (path, method, json) => {
     method: method || 'GET',
     json
   });
-
-  return JSON.parse(result);
+  if (typeof result === 'string' || result instanceof String)
+    return JSON.parse(result);
+  else
+    return result;
 }
 
 export const getJobs = async () => {
