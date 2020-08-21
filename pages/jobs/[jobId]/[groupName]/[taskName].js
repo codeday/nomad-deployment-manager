@@ -8,12 +8,21 @@ import Layout from '../../../../components/layout'
 import Button from '@codeday/topo/Atom/Button';
 import Text from '@codeday/topo/Atom/Text';
 import Box, { Grid, Flex } from '@codeday/topo/Atom/Box';
+import toastr from "toastr"
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
-const postUpdatedTag = async (jobId, groupName, taskName, newTag) => {
-  await fetch(`/api/${jobId}/${groupName}/${taskName}/update-tag`, {
-    method: 'POST',
-    body: JSON.stringify({ tag: newTag }),
-  });
+async function postUpdatedTag (jobId, groupName, taskName, newTag) {
+    const updateTagResponse = await fetch(`/api/${jobId}/${groupName}/${taskName}/update-tag`, {
+      method: 'POST',
+      body: JSON.stringify({tag: newTag}),
+    });
+
+    if (updateTagResponse.ok) {
+      toast.success("Job Deployed!")
+    } else {
+      toast.error("Something went wrong, sorry m8!")
+    }
 }
 
 export const getServerSideProps = async ({ params }) => {
@@ -50,7 +59,7 @@ export default ({ job, taskGroup, task, repo, defaultTag, builds }) => {
   const [ tag, setTag ] = useState(defaultTag);
 
   return (
-    <Layout 
+    <Layout
       extendMenu={<Menu id={job.ID} />}
     >
       <Text textTransform="uppercase" fontWeight="bold" fontSize="3xl" as='h1' paddingRight={4}>
@@ -65,7 +74,7 @@ export default ({ job, taskGroup, task, repo, defaultTag, builds }) => {
           </Flex>
           <Button
             type="button"
-            onClick={() => postUpdatedTag(job.ID, taskGroup.Name, task.Name, tag)} 
+            onClick={() => postUpdatedTag(job.ID, taskGroup.Name, task.Name, tag)}
           >
             Deploy
           </Button>
@@ -86,6 +95,7 @@ export default ({ job, taskGroup, task, repo, defaultTag, builds }) => {
           ))}
         </Box>
       )}
+      <ToastContainer />
     </Layout>
   )
 };
