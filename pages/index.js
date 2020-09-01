@@ -1,5 +1,4 @@
 import Router from 'next/router'
-import '../styles/index.css'
 
 const Home = () => <div />;
 Home.getInitialProps = ({ res }) => {
