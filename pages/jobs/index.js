@@ -16,7 +16,7 @@ export const getServerSideProps = async () => {
 
 const ListItem = ({item, ...props}) => (
   <Link href={`/jobs/${item.ID}`}>
-    <Box as="a" w="100%" padding={[4]} borderWidth="1px" rounded="lg">
+    <Box as="a" w="100%" padding={[4]} borderWidth={1} borderColor="current.border" cursor="pointer" rounded="lg">
       <Flex justify="space-between" align="center">
         <p>{item.ID}</p>
         {iconSwitch(item.Status)}

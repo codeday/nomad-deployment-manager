@@ -21,10 +21,10 @@ export default ({ name, defaultCount, onCountUpdate, tasks, jobId }) => {
   })
 
   return (
-    <Box padding={4} marginY={4} borderWidth="1px" rounded="lg"  >
+    <Box padding={4} marginY={4} borderWidth={1} borderColor="current.border" rounded="lg"  >
       <Text as="h2" fontSize="xl" fontWeight="semibold">{name}</Text>
       <Flex marginY={2} align="center">
-        <TextInput.default marginRight={4} size="sm" inputMode="numeric" pattern="\d{1,2}" value={count} onChange={(e) => setCount(e.target.value)}/>
+        <TextInput.default marginRight={4} size="sm" inputMode="numeric" pattern="\d{1,2}" borderColor="current.border" value={count} onChange={(e) => setCount(e.target.value)}/>
         <Button variant="solid" size="sm" variantColor="blue" type="submit" onClick={() => onCountUpdate(Number(count))}>Update Scale</Button>
       </Flex>
       <Text paddingTop={4} as="h2" fontSize="lg" fontWeight="thin">Tasks</Text>

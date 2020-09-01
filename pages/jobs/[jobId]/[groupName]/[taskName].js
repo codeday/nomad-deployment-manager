@@ -7,22 +7,15 @@ import Layout from '../../../../components/layout'
 
 import Button from '@codeday/topo/Atom/Button';
 import Text from '@codeday/topo/Atom/Text';
-import Box, { Grid, Flex } from '@codeday/topo/Atom/Box';
-import toastr from "toastr"
-import { ToastContainer, toast } from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css';
+import { default as Input } from '@codeday/topo/Atom/Input/Text';
+import Box, { Flex } from '@codeday/topo/Atom/Box';
+import { useToasts } from '@codeday/topo/utils';
 
 async function postUpdatedTag (jobId, groupName, taskName, newTag) {
-    const updateTagResponse = await fetch(`/api/${jobId}/${groupName}/${taskName}/update-tag`, {
+    return fetch(`/api/${jobId}/${groupName}/${taskName}/update-tag`, {
       method: 'POST',
       body: JSON.stringify({tag: newTag}),
     });
-
-    if (updateTagResponse.ok) {
-      toast.success("Job Deployed!")
-    } else {
-      toast.error("Something went wrong, sorry m8!")
-    }
 }
 
 export const getServerSideProps = async ({ params }) => {
@@ -57,6 +50,8 @@ const Menu = ({id}) => (
 
 export default ({ job, taskGroup, task, repo, defaultTag, builds }) => {
   const [ tag, setTag ] = useState(defaultTag);
+  const { success, error } = useToasts();
+
 
   return (
     <Layout
@@ -65,16 +60,23 @@ export default ({ job, taskGroup, task, repo, defaultTag, builds }) => {
       <Text textTransform="uppercase" fontWeight="bold" fontSize="3xl" as='h1' paddingRight={4}>
         {job.ID} &rarr; {taskGroup.Name} &rarr; {task.Name}
       </Text>
-      <Box padding={2} marginY={2} borderWidth="1px" rounded="lg">
+      <Box padding={2} marginY={2} rounded="lg">
         <Flex justify="space-between">
-          <Flex align="center" >
-            <Text as="span">{repo}</Text>
+          <Flex align="center" w="100%" pr={1} >
+            <Text as="span" whiteSpace="nowrap">{repo}</Text>
             <Text as="span" paddingX={1}>:</Text>
-            <Text as="input" fontWeight="bold" type="text" value={tag} onChange={(e) => setTag(e.target.value)} />
+            <Input as="input" fontWeight="bold" type="text" value={tag} onChange={(e) => setTag(e.target.value)} />
           </Flex>
           <Button
             type="button"
-            onClick={() => postUpdatedTag(job.ID, taskGroup.Name, task.Name, tag)}
+            onClick={async () => {
+              const status = await postUpdatedTag(job.ID, taskGroup.Name, task.Name, tag)
+              if (status.ok) {
+                success("Job Deployed!")
+              } else {
+                error("Something went wrong, sorry m8!")
+              }
+            }}
           >
             Deploy
           </Button>
@@ -95,7 +97,6 @@ export default ({ job, taskGroup, task, repo, defaultTag, builds }) => {
           ))}
         </Box>
       )}
-      <ToastContainer />
     </Layout>
   )
 };
