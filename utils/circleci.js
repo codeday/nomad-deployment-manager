@@ -15,7 +15,7 @@ export const getBuildsForProject = async repo => {
     );
   }
   return builds
-    .filter(build => build.build_parameters.CIRCLE_JOB === "build")
+    .filter(build => [build?.build_parameters?.CIRCLE_JOB, build?.workflows?.job_name, build?.workflows?.workflow_name].includes("build"))
     .map(cBuild => ({
       id: cBuild.vcs_revision,
       committer: cBuild.committer_name,
